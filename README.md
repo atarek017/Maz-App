@@ -1,4 +1,4 @@
-# ms_app_round3
+# maz_app
 
 A new Flutter application.
 
