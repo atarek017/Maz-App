@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ms_app_round3/src/core/models/eatsDay.dart';
+import 'package:ms_app_round3/src/core/models/failedRequest.dart';
 import 'package:ms_app_round3/src/core/models/product.dart';
 import 'package:ms_app_round3/src/core/provider/add_day_provider.dart';
 import 'package:ms_app_round3/src/core/provider/product_provider.dart';
@@ -8,9 +9,9 @@ import 'package:ms_app_round3/src/core/provider/user_provider.dart';
 import 'package:ms_app_round3/src/widgets/addButton.dart';
 import 'package:ms_app_round3/src/widgets/buildDateRow.dart';
 import 'package:ms_app_round3/src/widgets/button.dart';
+import 'package:ms_app_round3/src/widgets/dialog.dart';
 import 'package:ms_app_round3/src/widgets/usersListDialog.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 
 class AddDays extends StatefulWidget {
   @override
@@ -58,7 +59,8 @@ class _AddDaysState extends State<AddDays> {
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         height: 50,
-                        child: Text(_addDayProvider.eatsDayList[index].productId),
+                        child:
+                            Text(_addDayProvider.eatsDayList[index].productId),
                       );
                     }),
               )
@@ -71,16 +73,20 @@ class _AddDaysState extends State<AddDays> {
                   child: AppButton(
                     name: "Add Day",
                     iconData: Icons.add_circle,
-                    function: () {
+                    function: () async {
+                      var res= await _addDayProvider.addDay();
 
+                      if (res is FailedRequest) {
+                        Dialogs.showErrorDialog(context,
+                            message: res.message, code: res.code);
+                        print('results ${res.toString()}');
+                      }else{
+                        Dialogs.showErrorDialog(context,
+                            message: "added sucessfuly", code: 200);
+                        _addDayProvider.offersIds = [];
+                        _addDayProvider.eatsDayList=[];
+                      }
 
-                      final Map<String, dynamic> data = new Map<String, dynamic>();
-
-                      data['svcItems'] =
-                          _addDayProvider.eatsDayList.map((v) => v.toJson()).toList();
-
-                      print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                      print(data);
 
                     },
                   ),
@@ -120,7 +126,7 @@ class _AddDaysState extends State<AddDays> {
                     ),
                   );
 
-                  _addDayProvider.offersIds=[];
+                  _addDayProvider.offersIds = [];
                 });
 
                 Navigator.of(context).pop('Done');
