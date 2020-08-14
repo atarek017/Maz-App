@@ -50,17 +50,38 @@ class _AddDaysState extends State<AddDays> {
               ),
               BuildDateRow(),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
               Container(
-                height: height * .75,
+                height: height * .74,
                 child: ListView.builder(
                     itemCount: _addDayProvider.eatsDayList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 50,
-                        child:
-                            Text(_addDayProvider.eatsDayList[index].productId),
+                      return Dismissible(
+                        background: Container(color: Colors.greenAccent,),
+                        key: Key(_addDayProvider.eatsDayList[index].toString()),
+                        onDismissed: (direction){
+                          _addDayProvider.eatsDayList.removeAt(index);
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text("Item is Removed"),
+                          ));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 10),
+                          height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(getProductName( _addDayProvider.eatsDayList[index].productId)),
+                              SizedBox(width: 20,),
+                              Text(_addDayProvider.eatsDayList[index].price +" LE"),
+                            ],
+                          ),
+                        ),
                       );
                     }),
               )
@@ -74,20 +95,18 @@ class _AddDaysState extends State<AddDays> {
                     name: "Add Day",
                     iconData: Icons.add_circle,
                     function: () async {
-                      var res= await _addDayProvider.addDay();
+                      var res = await _addDayProvider.addDay();
 
                       if (res is FailedRequest) {
                         Dialogs.showErrorDialog(context,
                             message: res.message, code: res.code);
                         print('results ${res.toString()}');
-                      }else{
+                      } else {
                         Dialogs.showErrorDialog(context,
                             message: "added sucessfuly", code: 200);
                         _addDayProvider.offersIds = [];
-                        _addDayProvider.eatsDayList=[];
+                        _addDayProvider.eatsDayList = [];
                       }
-
-
                     },
                   ),
                 )
@@ -150,6 +169,14 @@ class _AddDaysState extends State<AddDays> {
       if (i.name == _productProvider.selectedProductName) {
         return i.id;
       }
+    }
+    return "";
+  }
+
+  String getProductName(String id){
+    for (int i=0; i<=_productProvider.allProducts.length;i++) {
+      if(_productProvider.allProducts[i].id==id)
+        return _productProvider.allProducts[i].name;
     }
     return "";
   }
