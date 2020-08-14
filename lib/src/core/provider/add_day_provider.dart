@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:ms_app_round3/src/core/models/eatsDay.dart';
+import 'package:http/http.dart' as http;
+import 'package:ms_app_round3/src/core/models/failedRequest.dart';
+
+import '../environment.dart';
 
 class AddDayProvider with ChangeNotifier {
   DateTime _dateNow = DateTime.now();
@@ -29,13 +35,51 @@ class AddDayProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  TextEditingController _priceTextController=TextEditingController();
+  TextEditingController _priceTextController = TextEditingController();
+
   TextEditingController get priceTextController => _priceTextController;
+
   set priceTextController(TextEditingController value) {
     _priceTextController = value;
     notifyListeners();
   }
 
+  bool _isLoading = false;
 
+  bool get isLoading => _isLoading;
 
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  Future<dynamic> addDay() async {
+    final List<Map<String, dynamic>> body =
+        _eatsDayList.map((v) => v.toJson()).toList();
+
+    _isLoading = true;
+    notifyListeners();
+    print('Starting request');
+
+    print( json.encode(body));
+
+    http.Response response = await http.post(Environment.addDay,
+        body: json.encode(body), headers: Environment.requestHeader);
+
+    print('Completed request');
+    print(' response : ${response.body}');
+
+    Map<String, dynamic> res = json.decode(response.body);
+    var results;
+      if (res['code'] == 200) {
+
+      results = true;
+    } else {
+      results =
+          FailedRequest(code: 400, message: res['message'], status: false);
+    }
+    _isLoading = false;
+    notifyListeners();
+    return results;
+  }
 }
