@@ -1,5 +1,5 @@
 class Environment {
-  static final String baseUrl = 'http://192.168.43.78:10000/';
+  static final String baseUrl = 'http://192.168.1.5:10000/';
   static final String userLogin = baseUrl + 'maz/user/login';
   static final String userSignUp = baseUrl + 'maz/user/signup';
   static final String userUpdateInfo = baseUrl + 'maz/user/updateUserInfo';

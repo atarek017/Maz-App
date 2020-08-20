@@ -33,7 +33,9 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             MoneyIndicator(),
             SizedBox(height: 60,),
-            AppButton(function: (){},name: "Money",iconData:  Icons.monetization_on,),
+            AppButton(function: (){
+
+            },name: "Products",iconData:  Icons.monetization_on,),
             SizedBox(height: 15,),
             AppButton(function: () async {
               await _userProvider.getEatsUsers();

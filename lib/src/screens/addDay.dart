@@ -43,7 +43,7 @@ class _AddDaysState extends State<AddDays> {
       ),
       body: Stack(
         children: <Widget>[
-          Column(
+          ListView(
             children: <Widget>[
               SizedBox(
                 height: 10,
@@ -58,27 +58,34 @@ class _AddDaysState extends State<AddDays> {
                     itemCount: _addDayProvider.eatsDayList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Dismissible(
-                        background: Container(color: Colors.greenAccent,),
+                        background: Container(
+                          color: Colors.greenAccent,
+                        ),
                         key: Key(_addDayProvider.eatsDayList[index].toString()),
-                        onDismissed: (direction){
+                        onDismissed: (direction) {
                           _addDayProvider.eatsDayList.removeAt(index);
                           Scaffold.of(context).showSnackBar(SnackBar(
                             content: Text("Item is Removed"),
                           ));
                         },
                         child: Container(
-                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 10),
+                          margin:
+                              EdgeInsets.only(left: 20, right: 20, bottom: 10),
                           height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Text(getProductName( _addDayProvider.eatsDayList[index].productId)),
-                              SizedBox(width: 20,),
-                              Text(_addDayProvider.eatsDayList[index].price +" LE"),
+                              Text(getProductName(_addDayProvider
+                                  .eatsDayList[index].productId)),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(_addDayProvider.eatsDayList[index].price +
+                                  " LE"),
                             ],
                           ),
                         ),
@@ -136,16 +143,18 @@ class _AddDaysState extends State<AddDays> {
               isDestructiveAction: true,
               onPressed: () {
                 setState(() {
-                  _addDayProvider.eatsDayList.add(
-                    EatsDay(
-                      date: _addDayProvider.dateNow.toString(),
-                      officerIds: _addDayProvider.offersIds,
-                      price: _addDayProvider.priceTextController.text,
-                      productId: getProductId(),
-                    ),
-                  );
-
-                  _addDayProvider.offersIds = [];
+                  if (_addDayProvider.offersIds.isNotEmpty &&
+                      _addDayProvider.priceTextController.text != null) {
+                    _addDayProvider.eatsDayList.add(
+                      EatsDay(
+                        date: _addDayProvider.dateNow.toString(),
+                        officerIds: _addDayProvider.offersIds,
+                        price: _addDayProvider.priceTextController.text,
+                        productId: getProductId(),
+                      ),
+                    );
+                    _addDayProvider.offersIds = [];
+                  }
                 });
 
                 Navigator.of(context).pop('Done');
@@ -173,9 +182,9 @@ class _AddDaysState extends State<AddDays> {
     return "";
   }
 
-  String getProductName(String id){
-    for (int i=0; i<=_productProvider.allProducts.length;i++) {
-      if(_productProvider.allProducts[i].id==id)
+  String getProductName(String id) {
+    for (int i = 0; i <= _productProvider.allProducts.length; i++) {
+      if (_productProvider.allProducts[i].id == id)
         return _productProvider.allProducts[i].name;
     }
     return "";

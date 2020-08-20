@@ -18,6 +18,7 @@ class _BuildDateRowState extends State<BuildDateRow>{
   Widget build(BuildContext context) {
     addDayProvider= Provider.of<AddDayProvider>(context);
 
+    var width =MediaQuery.of(context).size.width;
     return InkWell(
       onTap: (){
         showDatePickerBottomSheet(context);
@@ -25,7 +26,6 @@ class _BuildDateRowState extends State<BuildDateRow>{
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(width: 40),
           CircleAvatar(
             backgroundColor: Colors.green,
             child: Icon(
@@ -34,16 +34,13 @@ class _BuildDateRowState extends State<BuildDateRow>{
               size: 20,
             ),
           ),
+          SizedBox(width: width*.05),
           Container(
-            width: 270,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                DateFormat.yMMMMEEEEd().format(DateTime.parse(addDayProvider.dateNow.toString())),
-                style: TextStyle(fontSize: 16, color: Colors.green),
-              ),
+            child: Text(
+              DateFormat.yMMMMEEEEd().format(DateTime.parse(addDayProvider.dateNow.toString())),
+              style: TextStyle(fontSize: 16, color: Colors.green),
             ),
-          )
+          ),
         ],
       ),
     );
