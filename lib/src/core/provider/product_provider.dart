@@ -18,9 +18,13 @@ class ProductProvider extends ChangeNotifier {
   }
 
   List<Product> _allProducts = [];
-  String selectedProductName;
 
   List<Product> get allProducts => _allProducts;
+
+  TextEditingController nameTextEditorField = TextEditingController();
+  TextEditingController priceTextEditorField = TextEditingController();
+  var productTypes = {"Product", "sundries"};
+  String selectedType = "Product";
 
   Future<dynamic> getAllProducts() async {
     _isLoading = true;
@@ -51,5 +55,37 @@ class ProductProvider extends ChangeNotifier {
     return results;
   }
 
+  Future<dynamic> addProduct() async {
+    Product product = new Product(
+        id: "",
+        price: priceTextEditorField.text,
+        name: nameTextEditorField.text,
+        sundries: selectedType == "Product" ? "0" : "1");
 
+    final Map<String, dynamic> body = product.toJson();
+
+    _isLoading = true;
+    notifyListeners();
+    print('Starting request');
+
+    print(json.encode(body));
+
+    http.Response response = await http.post(Environment.addProduct,
+        body: json.encode(body), headers: Environment.requestHeader);
+
+    print('Completed request');
+    print(' response : ${response.body}');
+
+    Map<String, dynamic> res = json.decode(response.body);
+    var results;
+    if (res['code'] == 200) {
+      results = true;
+    } else {
+      results =
+          FailedRequest(code: 400, message: res['message'], status: false);
+    }
+    _isLoading = false;
+    notifyListeners();
+    return results;
+  }
 }

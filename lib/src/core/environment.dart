@@ -6,9 +6,13 @@ class Environment {
   static final String getAllUsers = baseUrl + 'maz/user/getAllUsers';
   static final String getEatsUsers = baseUrl + 'maz/user/getEatsUsers';
 
+  //products
   static final String getAllProducts = baseUrl + 'maz/products/getAllProducts';
-  static final String addDay = baseUrl + 'maz/eats/addDay';
+  static final String addProduct = baseUrl + 'maz/products/addProduct';
 
+  // eats day
+  static final String getProducts = baseUrl + 'maz/products/getProducts';
+  static final String addDay = baseUrl + 'maz/eats/addDay';
 
   static final Map<String, String> requestHeader = {
     'Content-Type': 'application/json'

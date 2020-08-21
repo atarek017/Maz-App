@@ -4,7 +4,6 @@ import 'package:ms_app_round3/src/core/models/eatsDay.dart';
 import 'package:ms_app_round3/src/core/models/failedRequest.dart';
 import 'package:ms_app_round3/src/core/models/product.dart';
 import 'package:ms_app_round3/src/core/provider/add_day_provider.dart';
-import 'package:ms_app_round3/src/core/provider/product_provider.dart';
 import 'package:ms_app_round3/src/core/provider/user_provider.dart';
 import 'package:ms_app_round3/src/widgets/addButton.dart';
 import 'package:ms_app_round3/src/widgets/buildDateRow.dart';
@@ -24,13 +23,11 @@ class _AddDaysState extends State<AddDays> {
   DateTime dateNow = DateTime.now();
 
   UserProvider _userProvider;
-  ProductProvider _productProvider;
   AddDayProvider _addDayProvider;
 
   @override
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
-    _productProvider = Provider.of<ProductProvider>(context);
     _addDayProvider = Provider.of<AddDayProvider>(context);
 
     var height = MediaQuery.of(context).size.height;
@@ -124,7 +121,7 @@ class _AddDaysState extends State<AddDays> {
                 _showDialog();
               });
               await _userProvider.getAllUsers();
-              await _productProvider.getAllProducts();
+              await _addDayProvider.getProducts();
             },
           )
         ],
@@ -174,8 +171,8 @@ class _AddDaysState extends State<AddDays> {
   }
 
   String getProductId() {
-    for (Product i in _productProvider.allProducts) {
-      if (i.name == _productProvider.selectedProductName) {
+    for (Product i in _addDayProvider.products) {
+      if (i.name == _addDayProvider.selectedProductName) {
         return i.id;
       }
     }
@@ -183,9 +180,9 @@ class _AddDaysState extends State<AddDays> {
   }
 
   String getProductName(String id) {
-    for (int i = 0; i <= _productProvider.allProducts.length; i++) {
-      if (_productProvider.allProducts[i].id == id)
-        return _productProvider.allProducts[i].name;
+    for (int i = 0; i <= _addDayProvider.products.length; i++) {
+      if (_addDayProvider.products[i].id == id)
+        return _addDayProvider.products[i].name;
     }
     return "";
   }

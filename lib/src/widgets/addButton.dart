@@ -15,7 +15,11 @@ class AddButton extends StatelessWidget {
         onTap: function,
         child: Container(
           margin: EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
+              width: 5,
+            ),),
           child: IconButton(
             color: Colors.white,
             onPressed: function,

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ms_app_round3/src/core/models/product.dart';
 import 'package:ms_app_round3/src/core/provider/add_day_provider.dart';
-import 'package:ms_app_round3/src/core/provider/product_provider.dart';
 import 'package:ms_app_round3/src/core/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,15 +12,12 @@ class MyDialogContent extends StatefulWidget {
 
 class _MyDialogContentState extends State<MyDialogContent> {
   UserProvider userProvider;
-
-  ProductProvider _productProvider;
   AddDayProvider _addDayProvider;
 
 
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
-    _productProvider = Provider.of<ProductProvider>(context);
     _addDayProvider = Provider.of<AddDayProvider>(context);
     return _getContent();
   }
@@ -48,7 +44,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
                       height: 50,
                       width: 80,
                       child: DropdownButton<String>(
-                        items: _productProvider.allProducts
+                        items: _addDayProvider.products
                             .map((Product dropDowenItem) {
                           return DropdownMenuItem<String>(
                             value: dropDowenItem.name,
@@ -57,10 +53,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         }).toList(),
                         onChanged: (String newValue) {
                           setState(() {
-                            _productProvider.selectedProductName = newValue;
+                            _addDayProvider.selectedProductName = newValue;
                           });
                         },
-                        value:  _productProvider.selectedProductName,
+                        value:  _addDayProvider.selectedProductName,
                       ),
                     ),
                     Container(

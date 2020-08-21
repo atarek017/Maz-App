@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:ms_app_round3/src/core/models/eatsDay.dart';
 import 'package:http/http.dart' as http;
 import 'package:ms_app_round3/src/core/models/failedRequest.dart';
+import 'package:ms_app_round3/src/core/models/product.dart';
 
 import '../environment.dart';
 
@@ -44,6 +45,13 @@ class AddDayProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
+
+  List<Product> _products = [];
+  String selectedProductName;
+
+  List<Product> get products => _products;
+
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -72,6 +80,35 @@ class AddDayProvider with ChangeNotifier {
     Map<String, dynamic> res = json.decode(response.body);
     var results;
       if (res['code'] == 200) {
+
+      results = true;
+    } else {
+      results =
+          FailedRequest(code: 400, message: res['message'], status: false);
+    }
+    _isLoading = false;
+    notifyListeners();
+    return results;
+  }
+
+  Future<dynamic> getProducts() async {
+    _isLoading = true;
+    notifyListeners();
+    print('Starting request');
+
+    http.Response response = await http.post(Environment.getProducts,
+        headers: Environment.requestHeader);
+    print('Completed request');
+    print(' response : ${response.body}');
+    Map<String, dynamic> res = json.decode(response.body);
+    var results;
+    if (res['code'] == 200) {
+      _products = [];
+      if (res['data'] != '[]') {
+        res['data'].forEach((v) {
+          _products.add(new Product.fromJson(v));
+        });
+      }
 
       results = true;
     } else {

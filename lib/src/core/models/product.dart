@@ -19,5 +19,7 @@ class Product {
     data['name'] = this.name;
     data['price'] = this.price;
     data['sundries'] = this.sundries;
+
+    return data;
 }
 }
