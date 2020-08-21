@@ -9,6 +9,7 @@ class Environment {
   //products
   static final String getAllProducts = baseUrl + 'maz/products/getAllProducts';
   static final String addProduct = baseUrl + 'maz/products/addProduct';
+  static final String updateProductInfo = baseUrl + 'maz/products/updateProductInfo';
 
   // eats day
   static final String getProducts = baseUrl + 'maz/products/getProducts';

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:ms_app_round3/src/core/models/failedRequest.dart';
 import 'package:ms_app_round3/src/core/models/product.dart';
@@ -20,6 +19,15 @@ class ProductProvider extends ChangeNotifier {
   List<Product> _allProducts = [];
 
   List<Product> get allProducts => _allProducts;
+
+  Product _selectedProduct;
+
+  Product get selectedProduct => _selectedProduct;
+
+  set selectedProduct(Product value) {
+    _selectedProduct = value;
+    notifyListeners();
+  }
 
   TextEditingController nameTextEditorField = TextEditingController();
   TextEditingController priceTextEditorField = TextEditingController();
@@ -71,6 +79,40 @@ class ProductProvider extends ChangeNotifier {
     print(json.encode(body));
 
     http.Response response = await http.post(Environment.addProduct,
+        body: json.encode(body), headers: Environment.requestHeader);
+
+    print('Completed request');
+    print(' response : ${response.body}');
+
+    Map<String, dynamic> res = json.decode(response.body);
+    var results;
+    if (res['code'] == 200) {
+      results = true;
+    } else {
+      results =
+          FailedRequest(code: 400, message: res['message'], status: false);
+    }
+    _isLoading = false;
+    notifyListeners();
+    return results;
+  }
+
+  Future<dynamic> updateProductInfo() async {
+    Product product = new Product(
+        id: _selectedProduct.id,
+        price: priceTextEditorField.text,
+        name: nameTextEditorField.text,
+        sundries: selectedType == "Product" ? "0" : "1");
+
+    final Map<String, dynamic> body = product.toJson();
+
+    _isLoading = true;
+    notifyListeners();
+    print('Starting request');
+
+    print(json.encode(body));
+
+    http.Response response = await http.post(Environment.updateProductInfo,
         body: json.encode(body), headers: Environment.requestHeader);
 
     print('Completed request');
