@@ -54,7 +54,7 @@ class _spashScreenState extends State<SplashScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 30),
+                      fontSize: 29),
                 )),
           ],
         ),

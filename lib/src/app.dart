@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ms_app_round3/src/core/provider/mony_provider.dart';
 import 'package:ms_app_round3/src/screens/home_page.dart';
+import 'package:ms_app_round3/src/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'core/provider/add_day_provider.dart';
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: AddDayProvider()),
         ChangeNotifierProvider.value(value: ProductProvider()),
+        ChangeNotifierProvider.value(value: MoneyProvider()),
       ],
 
       child: MaterialApp(
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: HomePage(),
+        home: SplashScreen(),
       ),
     );
   }

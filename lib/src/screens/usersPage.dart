@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ms_app_round3/src/core/provider/user_provider.dart';
 import 'package:ms_app_round3/src/screens/userProfile.dart';
 import 'package:ms_app_round3/src/widgets/addButton.dart';
+import 'package:ms_app_round3/src/widgets/appBar.dart';
 import 'package:ms_app_round3/src/widgets/userItemList.dart';
 import 'package:provider/provider.dart';
 
@@ -20,28 +21,36 @@ class UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) {
     _userProvider = Provider.of<UserProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Officers"),
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: <Widget>[
-          AddButton(function: (){},),
-          ListView.builder(
-            itemCount: _userProvider.users.length,
-            itemBuilder: (BuildContext context, int index) {
-              return UserItemList(
-                user: _userProvider.users[index],
-                selectedAction: () {
-                  _userProvider.selectedUser=_userProvider.users[index];
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => UserProfile()));
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            AppBarClipper(
+              title: "Officers",
+            ),
+            AddButton(
+              function: () {},
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 80),
+              child: ListView.builder(
+                itemCount: _userProvider.users.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return UserItemList(
+                    user: _userProvider.users[index],
+                    selectedAction: () {
+                      _userProvider.selectedUser = _userProvider.users[index];
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserProfile()));
+                    },
+                  );
                 },
-              );
-            },
-          )
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

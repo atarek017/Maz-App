@@ -4,40 +4,53 @@ import 'package:intl/intl.dart';
 import 'package:ms_app_round3/src/core/provider/add_day_provider.dart';
 import 'package:provider/provider.dart';
 
-class BuildDateRow extends StatefulWidget{
+class BuildDateRow extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _BuildDateRowState();
   }
 }
 
-class _BuildDateRowState extends State<BuildDateRow>{
-
+class _BuildDateRowState extends State<BuildDateRow> {
   AddDayProvider addDayProvider;
+
   @override
   Widget build(BuildContext context) {
-    addDayProvider= Provider.of<AddDayProvider>(context);
+    addDayProvider = Provider.of<AddDayProvider>(context);
 
-    var width =MediaQuery.of(context).size.width;
+    var width = MediaQuery.of(context).size.width;
     return InkWell(
-      onTap: (){
+      onTap: () {
         showDatePickerBottomSheet(context);
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CircleAvatar(
-            backgroundColor: Colors.green,
-            child: Icon(
-              Icons.event,
-              color: Colors.white,
-              size: 20,
+          Container(
+            width: 35,
+            height: 35,
+            decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  radius: 1.5,
+                  colors: [
+                    Colors.lightGreenAccent,
+                    Colors.green,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20)),
+            child: Center(
+              child: Icon(
+                Icons.event,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
-          SizedBox(width: width*.05),
+          SizedBox(width: width * .05),
           Container(
             child: Text(
-              DateFormat.yMMMMEEEEd().format(DateTime.parse(addDayProvider.dateNow.toString())),
+              DateFormat.yMMMMEEEEd()
+                  .format(DateTime.parse(addDayProvider.dateNow.toString())),
               style: TextStyle(fontSize: 16, color: Colors.green),
             ),
           ),
@@ -45,7 +58,6 @@ class _BuildDateRowState extends State<BuildDateRow>{
       ),
     );
   }
-
 
   Future<bool> showDatePickerBottomSheet(context) {
     return showModalBottomSheet(
@@ -103,7 +115,6 @@ class _BuildDateRowState extends State<BuildDateRow>{
                   child: CupertinoDatePicker(
                     initialDateTime: DateTime.now().add(new Duration(hours: 1)),
                     onDateTimeChanged: (DateTime newDate) async {
-
                       setState(() {
                         addDayProvider.dateNow = newDate;
                       });
@@ -121,5 +132,4 @@ class _BuildDateRowState extends State<BuildDateRow>{
           );
         });
   }
-
 }

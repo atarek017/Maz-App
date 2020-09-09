@@ -5,6 +5,7 @@ import 'package:ms_app_round3/src/core/provider/product_provider.dart';
 import 'package:ms_app_round3/src/widgets/UpdateProductDialog.dart';
 import 'package:ms_app_round3/src/widgets/addButton.dart';
 import 'package:ms_app_round3/src/widgets/addProductDialog.dart';
+import 'package:ms_app_round3/src/widgets/appBar.dart';
 import 'package:ms_app_round3/src/widgets/dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -23,33 +24,36 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     _productProvider = Provider.of<ProductProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Products"),
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: <Widget>[
-          ListView.builder(
-            itemCount: _productProvider.allProducts.length,
-            itemBuilder: (context, index) {
-              if (_productProvider.allProducts[index].sundries == "0") {
-                return productCard(index);
-              } else {
-                if (sundries == "1") {
-                  sundries = "0";
-                  return productCard2(index);
-                }
-                return productCard(index);
-              }
-            },
-          ),
-          AddButton(
-            function: () {
-              addProductDialog(context);
-            },
-          ),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            AppBarClipper(title: "Products",),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: ListView.builder(
+                itemCount: _productProvider.allProducts.length,
+                itemBuilder: (context, index) {
+                  if (_productProvider.allProducts[index].sundries == "0") {
+                    return productCard(index);
+                  } else {
+                    if (sundries == "1") {
+                      sundries = "0";
+                      return productCard2(index);
+                    }
+                    return productCard(index);
+                  }
+                },
+              ),
+            ),
+            AddButton(
+              function: () {
+                addProductDialog(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -58,10 +62,15 @@ class _ProductsPageState extends State<ProductsPage> {
     return InkWell(
       onTap: () {
         _productProvider.selectedProduct = _productProvider.allProducts[index];
-        _productProvider.nameTextEditorField.text=_productProvider.selectedProduct.name;
-        _productProvider.priceTextEditorField.text=_productProvider.selectedProduct.price;
-        _productProvider.selectedType=_productProvider.selectedProduct.sundries=="1"?"sundries":"Product";
-        sundries="1";
+        _productProvider.nameTextEditorField.text =
+            _productProvider.selectedProduct.name;
+        _productProvider.priceTextEditorField.text =
+            _productProvider.selectedProduct.price;
+        _productProvider.selectedType =
+            _productProvider.selectedProduct.sundries == "1"
+                ? "sundries"
+                : "Product";
+        sundries = "1";
         updateProductDialog(context);
       },
       child: Dismissible(
@@ -195,6 +204,4 @@ class _ProductsPageState extends State<ProductsPage> {
       },
     );
   }
-
-
 }

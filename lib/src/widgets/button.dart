@@ -19,7 +19,13 @@ class AppButton extends StatelessWidget {
           width: _width * .50,
           height: _height * .07,
           decoration: BoxDecoration(
-            color: Colors.green,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              colors: [
+                Colors.lightGreenAccent,
+                Colors.green,
+              ],
+            ),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(

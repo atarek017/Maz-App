@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +13,25 @@ class AddButton extends StatelessWidget {
       child: InkWell(
         onTap: function,
         child: Container(
+          width: 60,
+          height: 60,
+
+          decoration: BoxDecoration(
+              gradient: RadialGradient(
+                radius: 1.5,
+                colors: [
+                  Colors.lightGreenAccent,
+                  Colors.green,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),border:Border.all(width: 2,color: Colors.white,) ),
+
           margin: EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.green, shape: BoxShape.circle,
-            border: Border.all(
+          child: Center(
+            child: Icon(
+              Icons.add_circle_outline,
               color: Colors.white,
-              width: 5,
-            ),),
-          child: IconButton(
-            color: Colors.white,
-            onPressed: function,
-            icon: Icon(Icons.add_circle_outline),
+            ),
           ),
         ),
       ),
